@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <title>Ht-markdown</title>
+        <link type="text/css" rel="stylesheet" href="css/bootstrap.css">
         <link rel="stylesheet" href="codemirror-4.7/lib/codemirror.css">
         <script src="js/jquery-1.10.2.min.js"></script>
         <script src="codemirror-4.7/lib/codemirror.js"></script>
@@ -14,25 +15,67 @@
         <script src="codemirror-4.7/mode/gfm/gfm.js"></script>
 
         <script src="codemirror-4.7/addon/edit/closebrackets.js"></script>
-
         <script src="marked/lib/marked.js"></script>
+        <script type="text/javascript" src="js/shortcut.js"></script>
+
+        <style>
+            body{
+                background-color: #ccc;
+                padding:20px;
+            }
+            #result{
+                background-color: white;
+                height:200px;
+            }
+
+            .component{
+                margin-bottom: 20px;
+            }
+            .component p{
+                color:white;
+            }
+
+
+        </style>
+
     </head>
     <body>
-        <textarea id="editor_js" rows="30" cols="50"></textarea>
-        <div id="result"></div>
+        <button id="save" class="btn btn-primary component">save (ctrl+S)</button><span> * works by chrome at least</span>
+        <div class="component">
+            <p>markdown</p>
+            <textarea id="editor_js" rows="30" cols="50"></textarea>
+        </div>
+        <div class="component">
+            <p>html</p>
+            <div id="result"></div>
+        </div>
 
         <script>
-            
+
+            $("#save").click(function() {
+                var blob = new Blob([$("#editor_js").val()], {"type": "application/x-msdownload"});
+                window.URL = window.URL || window.webkitURL;
+//                window.location=window.URL.createObjectURL(blob); //Can't set title in this way! 
+                $("<a/>").attr({
+                    href: window.URL.createObjectURL(blob),
+                    download: "title.md" // TODO user can input title
+                })[0].click();
+            });
+
+            shortcut.add("Ctrl+S", function() {
+                $("#save")[0].click();
+            });
+
             marked.setOptions({
-                        renderer: new marked.Renderer(),
-                        gfm: true,
-                        tables: true,
-                        breaks: false,
-                        pedantic: false,
-                        sanitize: true,
-                        smartLists: true,
-                        smartypants: false
-                    });
+                renderer: new marked.Renderer(),
+                gfm: true,
+                tables: true,
+                breaks: false,
+                pedantic: false,
+                sanitize: true,
+                smartLists: true,
+                smartypants: false
+            });
 
             $(function() {
                 var jsEditor = CodeMirror.fromTextArea(document.getElementById('editor_js'), {
@@ -42,8 +85,8 @@
                     indentUnit: 4,
                     autoCloseBrackets: true
                 });
-                
-                jsEditor.on("change",function(){
+
+                jsEditor.on("change", function() {
                     jsEditor.save();
                     $("#result").html(marked(document.getElementById('editor_js').value));
                 });
