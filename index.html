@@ -32,7 +32,7 @@
             .component{
                 margin-bottom: 20px;
             }
-            .component p{
+            .title{
                 color:white;
             }
 
@@ -45,18 +45,18 @@
         <span> * works by chrome at least</span>
         <a href="https://github.com/hitokun-s/ht-markdown" target="_blank" class="pull-right">Source</a>
         <div class="component">
-            <p>markdown</p>
-            <textarea id="editor_js" rows="30" cols="50"></textarea>
+            <p class="title">markdown</p>
+            <textarea id="editor" rows="30" cols="50"></textarea>
         </div>
         <div class="component">
-            <p>html</p>
+            <p class="title">html</p>
             <div id="result"></div>
         </div>
 
         <script>
 
             $("#save").click(function() {
-                var blob = new Blob([$("#editor_js").val()], {"type": "application/x-msdownload"});
+                var blob = new Blob([$("#editor").val()], {"type": "application/x-msdownload"});
                 window.URL = window.URL || window.webkitURL;
 //                window.location=window.URL.createObjectURL(blob); //Can't set title in this way! 
                 $("<a/>").attr({
@@ -81,7 +81,7 @@
             });
 
             $(function() {
-                var jsEditor = CodeMirror.fromTextArea(document.getElementById('editor_js'), {
+                var editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
 //                    mode: "javascript",
                     mode: "gfm",
                     lineNumbers: true,
@@ -89,9 +89,21 @@
                     autoCloseBrackets: true
                 });
 
-                jsEditor.on("change", function() {
-                    jsEditor.save();
-                    $("#result").html(marked(document.getElementById('editor_js').value));
+                editor.on("change", function() {
+                    editor.save();
+                    $("#result").html(marked(document.getElementById('editor').value));
+                });
+
+                editor.setOption("extraKeys", {
+                    // "SmartEnter" function
+                    Enter: function(cm) {
+                        if(cm.getLine(cm.getCursor().line).replace(/\s/g, "")){
+                            // if the line has any content other than space, 
+                            // add 2 spaces at the end of the line.
+                            cm.replaceSelection("  ");
+                        }
+                        cm.execCommand("newlineAndIndent");
+                    }
                 });
 
             });
