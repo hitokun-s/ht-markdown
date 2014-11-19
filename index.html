@@ -81,7 +81,7 @@
             });
 
             $(function() {
-                var editor = CodeMirror.fromTextArea(document.getElementById('editor'), {
+                var editor = CodeMirror.fromTextArea($('#editor')[0], {
 //                    mode: "javascript",
                     mode: "gfm",
                     lineNumbers: true,
@@ -91,7 +91,7 @@
 
                 editor.on("change", function() {
                     editor.save();
-                    $("#result").html(marked(document.getElementById('editor').value));
+                    $("#result").html(marked($('#editor').val()));
                 });
 
                 editor.setOption("extraKeys", {
