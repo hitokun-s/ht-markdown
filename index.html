@@ -18,7 +18,7 @@
         <script src="codemirror-4.7/addon/edit/closebrackets.js"></script>
         <script src="marked/lib/marked.js"></script>
         <script type="text/javascript" src="js/shortcut.js"></script>
-        
+
         <style>
             body{
                 background-color: #ccc;
@@ -26,32 +26,37 @@
             }
             #result{
                 background-color: white;
-                height:200px;
             }
 
-            .component{
-                margin-bottom: 20px;
-            }
             .title{
-                color:white;
+                font-size: 1.6em;
+                font-family: impact;
             }
             #result{
                 overflow: auto;
             }
+            .component{
+                display:inline-block;
+                width:49%;
+            }
+
         </style>
         <script src="/js/google-tracking.js"></script>
     </head>
     <body>
-        <button id="save" class="btn btn-primary component">save (Ctrl+S)</button>
+        <button id="save" class="btn btn-primary">save (Ctrl+S)</button>
         <span> * works in chrome at least</span>
         <a href="https://github.com/hitokun-s/ht-markdown" target="_blank" class="pull-right">Source</a>
-        <div class="component">
-            <p class="title">markdown</p>
-            <textarea id="editor" rows="30" cols="50"></textarea>
-        </div>
-        <div class="component">
-            <p class="title">html</p>
-            <div id="result"></div>
+        <hr>
+        <div id="content">
+            <div class="component">
+                <p class="title">Markdown</p>
+                <textarea id="editor" rows="30" cols="50"></textarea>
+            </div>
+            <div class="component">
+                <p class="title">HTML</p>
+                <div id="result"></div>
+            </div>
         </div>
 
         <script>
@@ -80,14 +85,18 @@
                 smartLists: true,
                 smartypants: false
             });
+            
+            var editor;
 
             $(function() {
-                var editor = CodeMirror.fromTextArea($('#editor')[0], {
+                
+                editor = CodeMirror.fromTextArea($('#editor')[0], {
 //                    mode: "javascript",
                     mode: "gfm",
                     lineNumbers: true,
                     indentUnit: 4,
-                    autoCloseBrackets: true
+                    autoCloseBrackets: true,
+                    autofocus:true
                 });
 
                 editor.on("change", function() {
@@ -106,7 +115,12 @@
                         cm.execCommand("newlineAndIndent");
                     }
                 });
-
+                // fit editor area size to window                
+                $(".CodeMirror, #result").height($(window).height() - $("#content").offset().top - $(".title").eq(0).height() - 37);
+                
+                // this seems to be necessary after resizing eitor
+                editor.doc.cm.execCommand("newlineAndIndent");
+                editor.doc.cm.execCommand("undo");
             });
 
         </script>
