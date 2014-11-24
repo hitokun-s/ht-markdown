@@ -45,7 +45,7 @@
     </head>
     <body>
         <button id="save" class="btn btn-primary">save (Ctrl+S)</button>
-        <span> * works in chrome at least</span>
+        <span class="visible-on-web-only"> * works in chrome at least</span>
         <a href="https://github.com/hitokun-s/ht-markdown" target="_blank" class="pull-right">Source</a>
         <hr>
         <div id="content">
@@ -60,6 +60,8 @@
         </div>
 
         <script>
+            var isNode = typeof( require ) !== "undefined";
+            $(".visible-on-web-only").css("visibility", isNode ? "hidden" : "visible");
 
             $("#save").click(function() {
                 var blob = new Blob([$("#editor").val()], {"type": "application/x-msdownload"});
