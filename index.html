@@ -6,7 +6,7 @@
         <link rel="shortcut icon" href="img/favicon16.png">
         <link type="text/css" rel="stylesheet" href="css/bootstrap.css">
         <link rel="stylesheet" href="codemirror-4.7/lib/codemirror.css">
-        <script src="js/jquery-1.10.2.min.js"></script>
+        
         <script src="codemirror-4.7/lib/codemirror.js"></script>
         <!-- 言語に応じたjsファイルを読み込む -->
         <script src="codemirror-4.7/mode/javascript/javascript.js"></script>
@@ -14,11 +14,13 @@
         <script src="codemirror-4.7/mode/javascript/javascript.js"></script>
         <script src="codemirror-4.7/mode/markdown/markdown.js"></script>
         <script src="codemirror-4.7/mode/gfm/gfm.js"></script>
-
         <script src="codemirror-4.7/addon/edit/closebrackets.js"></script>
+        
         <script src="marked/lib/marked.js"></script>
-        <script type="text/javascript" src="js/shortcut.js"></script>
-
+        
+        <script src="lib/jquery-1.10.2.min.js"></script>
+        <script src="lib/shortcut.js"></script>
+        <script src="js/HtMarkdown.js"></script>
         <style>
             body{
                 background-color: #ccc;
@@ -45,7 +47,6 @@
             #header{
                 height:48px;
             }
-
         </style>
         <script src="/js/google-tracking.js"></script>
     </head>
@@ -105,43 +106,17 @@
                 smartypants: false
             });
 
-            var editor;
-
             $(function() {
-
-                editor = CodeMirror.fromTextArea($('#editor')[0], {
-//                    mode: "javascript",
-                    mode: "gfm",
-                    lineNumbers: true,
-                    indentUnit: 4,
-                    autoCloseBrackets: true,
-                    autofocus: true
+                var htMarkdown = new HtMarkdown($('#editor')[0]);
+                htMarkdown.onChange(function(markdown){
+                    $("#result").html(marked(markdown));
                 });
-
-                editor.on("change", function() {
-                    editor.save();
-                    $("#result").html(marked($('#editor').val()));
-                });
-
-                editor.setOption("extraKeys", {
-                    // "SmartEnter" function
-                    Enter: function(cm) {
-                        if (cm.getLine(cm.getCursor().line).replace(/\s/g, "")) {
-                            // if the line has any content other than space, 
-                            // add 2 spaces at the end of the line.
-                            cm.replaceSelection("  ");
-                        }
-                        cm.execCommand("newlineAndIndent");
-                    }
-                });
-                // fit editor area size to window                
+                // fit editor area size to window
                 $(".CodeMirror, #result").height($(window).height() - $("#content").offset().top - $(".title").eq(0).height() - 37);
-
                 // this seems to be necessary after resizing eitor
-                editor.doc.cm.execCommand("newlineAndIndent");
-                editor.doc.cm.execCommand("undo");
+                htMarkdown.execCommand("newlineAndIndent");
+                htMarkdown.execCommand("undo");
             });
-
         </script>
     </body>
 </html>
