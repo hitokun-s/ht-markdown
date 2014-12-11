@@ -10,6 +10,7 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
         <link rel="stylesheet" href="../css/bootstrap.css"/>
+        <link rel="stylesheet" href="../font/font-awesome-4.2.0/css/font-awesome.min.css"/>
         <script src="../lib/jquery-1.10.2.min.js"></script>
         <style>
             html{
@@ -23,6 +24,17 @@ and open the template in the editor.
             #result{
                 height:80%;
                background-color: white;
+            }
+            ul li {
+                list-style: none;
+                position: relative;
+            }
+            ul li:before {
+                position: absolute;
+                left: -1.5em;
+                font-family: 'FontAwesome';
+                content: "\f005";
+                color: #dd0;
             }
         </style>
     </head>
