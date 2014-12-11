@@ -7,7 +7,8 @@ var HtMarkdown = function(elm) {
         lineNumbers: true,
         indentUnit: 4,
         autoCloseBrackets: true,
-        autofocus: true
+        autofocus: true,
+        lineWrapping:true
     });
 
     var onChange = function() {};
@@ -15,6 +16,20 @@ var HtMarkdown = function(elm) {
     editor.on("change", function() {
         editor.save();
         onChange($('#editor').val());
+    });
+
+    // detect paste
+    editor.on("inputRead", function(cm,changeObj) {
+        var arr = changeObj.text[0].split(".");
+        if(arr.length <= 1)return;
+        var extension = arr.pop();
+        if(["gif","jpg","JPG","png"].filter(function(v){
+            return v == extension;
+        }).length > 0){
+            console.log(changeObj);
+            cm.execCommand("undo");
+            cm.replaceSelection("!["+changeObj.text[0]+"]("+changeObj.text[0]+")");
+        }
     });
 
     editor.setOption("extraKeys", {
