@@ -90,26 +90,39 @@
         </style>
     </head>
     <body>
-    <div id="container">
-        <div id="header">
-            <p id="logo">NOSSG</p>
-        </div>
-        <div id="main" class="row">
-            <div id="left-panel" class="col-6">
-                <p class="mini-header">Markdown</p>
-                <textarea id="editor" rows="30" cols="50" wrap="soft"></textarea>
+        <div id="container">
+            <div id="header">
+                <p id="logo">NOSSG</p>
             </div>
-            <div id="right-panel" class="col-6">
-                <p class="mini-header">HTML</p>
-                <iframe id="preview" src="tmpl/template.html"></iframe>
+            <div id="main" class="row">
+                <div id="left-panel" class="col-6">
+                    <p class="mini-header">Markdown</p>
+                    <textarea id="editor" rows="30" cols="50" wrap="soft"></textarea>
+                </div>
+                <div id="right-panel" class="col-6">
+                    <p class="mini-header">HTML</p>
+                    <iframe id="preview" src="tmpl/template.html"></iframe>
+                </div>
             </div>
         </div>
-    </div>
         <script>
-            var htMarkdown = new HtMarkdown($('#editor')[0]);
-            htMarkdown.onChange(function(markdown) {
-                var iframeContent = $('iframe')[0].contentWindow;
-                iframeContent.$("#result").html(marked(markdown));
+            $("iframe").load(function() {
+                var htMarkdown = new HtMarkdown($('#editor')[0]);
+                htMarkdown.onChange(function(markdown) {
+                    var iframeContent = $('iframe')[0].contentWindow;
+                    iframeContent.$("#result").html(marked(markdown));
+                });
+                htMarkdown.append(
+                        "#Today's Diary  \n\n" +
+                        "- got up  \n" +
+                        "- had lunch  \n" +
+                        "- had a nap  \n" +
+                        "- had a sweet  \n" +
+                        "- had a nap  \n" +
+                        "- had dinner  \n" +
+                        "- went to bed  \n\n" +
+                        "Oh my god...I have done nothing today."
+                );
             });
         </script>
     </body>
