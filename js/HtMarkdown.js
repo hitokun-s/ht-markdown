@@ -51,6 +51,9 @@ var HtMarkdown = function(elm) {
         },
         execCommand : function(command){
             editor.doc.cm.execCommand(command);
+        },
+        append:function(txt){
+            editor.replaceRange(txt, CodeMirror.Pos(editor.lastLine()));
         }
     };
     return global;
