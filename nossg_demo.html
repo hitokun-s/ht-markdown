@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+        <title>Node-Webkit Static Site Generator</title>
+        <!--<script src="js/jquery-1.10.2.min.js"></script>-->
+        <link rel="stylesheet" href="css/bootstrap.css">
+        <link rel="stylesheet" href="codemirror-4.7/lib/codemirror.css">
+
+        <script src="codemirror-4.7/lib/codemirror.js"></script>
+        <!-- 言語に応じたjsファイルを読み込む -->
+        <script src="codemirror-4.7/mode/javascript/javascript.js"></script>
+        <script src="codemirror-4.7/addon/mode/overlay.js"></script>
+        <script src="codemirror-4.7/mode/javascript/javascript.js"></script>
+        <script src="codemirror-4.7/mode/markdown/markdown.js"></script>
+        <script src="codemirror-4.7/mode/gfm/gfm.js"></script>
+        <script src="codemirror-4.7/addon/edit/closebrackets.js"></script>
+
+        <script src="marked/lib/marked.js"></script>
+
+        <script src="lib/jquery-1.10.2.min.js"></script>
+        <script src="lib/shortcut.js"></script>
+        <script src="js/HtMarkdown.js"></script>
+        <style>
+            html,body{
+                height: 100%;
+                width:100%;
+            }
+            body{
+                overflow-y: hidden;
+            }
+
+            #header{
+                position: absolute;
+                height: 20px;
+                width: 100%;
+                top:0px;
+                padding-left: 20px;
+                background-color: black;
+            }
+            #logo{
+                color:white;
+            }
+
+            .mini-header{
+                position: absolute;
+                height: 20px;
+                width: 100%;
+                top:0px;
+                padding-left: 20px;
+                background-color: burlywood;
+                border-bottom: 1px solid;
+                font-weight:bold;
+            }
+
+            #container{
+                padding-top: 20px;
+                height: 100%;
+                box-sizing: border-box;
+            }
+            #main,#editor,#preview{
+                height: 100%;
+                box-sizing: border-box;
+            }
+            #left-panel,#right-panel{
+                padding-top: 20px;
+                height: 100%;
+                box-sizing: border-box;
+                border-left: 1px solid;
+                border-right: 1px solid;
+                padding-left:0px !important;
+                padding-right:0px !important;
+            }
+            #main{
+                width: 100%;
+                /*padding: 2px;*/
+            }
+            #editor,#preview{
+                width: 100%;
+                border: none;
+            }
+            #result{
+                overflow-y: auto;
+            }
+            .CodeMirror{
+                height: 100%;
+            }
+
+        </style>
+    </head>
+    <body>
+    <div id="container">
+        <div id="header">
+            <p id="logo">NOSSG</p>
+        </div>
+        <div id="main" class="row">
+            <div id="left-panel" class="col-6">
+                <p class="mini-header">Markdown</p>
+                <textarea id="editor" rows="30" cols="50" wrap="soft"></textarea>
+            </div>
+            <div id="right-panel" class="col-6">
+                <p class="mini-header">HTML</p>
+                <iframe id="preview" src="tmpl/template.html"></iframe>
+            </div>
+        </div>
+    </div>
+        <script>
+            var htMarkdown = new HtMarkdown($('#editor')[0]);
+            htMarkdown.onChange(function(markdown) {
+                var iframeContent = $('iframe')[0].contentWindow;
+                iframeContent.$("#result").html(marked(markdown));
+            });
+        </script>
+    </body>
+</html>
