@@ -54,8 +54,13 @@ var HtMarkdown = function(elm) {
         },
         append:function(txt){
             editor.replaceRange(txt, CodeMirror.Pos(editor.lastLine()));
+        },
+        getValue:function(){
+            return editor.doc.getValue();
+        },
+        setValue:function(v){
+            return editor.doc.setValue(v);
         }
     };
     return global;
 };
-
